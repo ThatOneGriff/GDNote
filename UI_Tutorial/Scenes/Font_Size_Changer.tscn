@@ -1,0 +1,230 @@
+[gd_scene load_steps=7 format=3 uid="uid://dqm6c8ffdhlfi"]
+
+[ext_resource type="StyleBox" uid="uid://hlp12jf7jdbu" path="res://UI/Black_Themes/Button_Theme.tres" id="1_kynm5"]
+[ext_resource type="Theme" uid="uid://bifvasxiearl8" path="res://UI/Main_Text_Theme.tres" id="2_uqctf"]
+[ext_resource type="Texture2D" uid="uid://ypu482rt0ukh" path="res://UI/Pics/arrow.png" id="4_7hb0y"]
+[ext_resource type="StyleBox" uid="uid://bav61cdrvjmfs" path="res://UI/Invisible_Button_Theme.tres" id="4_yatf3"]
+
+[sub_resource type="GDScript" id="GDScript_b6m80"]
+script/source = "extends Control
+
+signal change_font_size(by: int)
+
+
+
+func change_theme_to_black():
+	
+	add_theme_stylebox_override(\"normal\", Themes.Button_Theme_B)
+	%Font_Size.add_theme_color_override(\"font_color\", Themes.font_color_B)
+	
+	%Size_Settings.button_up_color = Color(\"eadbc8\")
+	%Size_Settings.button_down_color = Color(\"222222\")
+	%Increase_Font_Size.modulate = Color(\"eadbc8\")
+	%Decrease_Font_Size.modulate = Color(\"eadbc8\")
+	
+
+
+
+func change_theme_to_white():
+	
+	add_theme_stylebox_override(\"normal\", Themes.Button_Theme_W)
+	%Font_Size.add_theme_color_override(\"font_color\", Themes.font_color_W)
+	
+	%Size_Settings.button_up_color = Color(\"222222\")
+	%Size_Settings.button_down_color = Color(\"f8f0e5\")
+	%Increase_Font_Size.modulate = Color(\"222222\")
+	%Decrease_Font_Size.modulate = Color(\"222222\")
+
+
+
+func update_text():
+	
+	%Font_Size.text = str(Globals.font_size)
+
+
+
+func _ready():
+	
+	update_text()
+
+
+
+#	====		SIGNALS			====
+
+
+
+func _on_clickable_zone_increase_pressed():
+	
+	if Globals.font_size == 99:
+		return
+	
+	Globals.font_size += 1
+	change_font_size.emit(1)
+	%Font_Size.text = str(Globals.font_size)
+	
+	$\"../../..\".save_settings()
+
+
+
+func _on_clickable_zone_decrease_pressed():
+	
+	if Globals.font_size == 9:
+		return
+	
+	Globals.font_size -= 1
+	change_font_size.emit(-1)
+	%Font_Size.text = str(Globals.font_size)
+	
+	$\"../../..\".save_settings()
+"
+
+[sub_resource type="GDScript" id="GDScript_pil44"]
+script/source = "extends VBoxContainer
+
+@export var button_down_color: Color = Color(\"222222\")
+@export var button_up_color: Color = Color(\"eadbc8\")
+
+
+
+func button_down_recolor(button: Control):
+	
+	var tween: Tween = get_tree().create_tween()
+	tween.tween_property(button, \"modulate\", button_down_color, .1)
+
+
+
+func button_up_recolor(button: Control):
+	
+	var tween: Tween = get_tree().create_tween()
+	tween.tween_property(button, \"modulate\", button_up_color, .1)
+
+
+
+#	====		SIGNALS			====
+
+
+
+func _on_clickable_zone_increase_button_down():
+	
+	button_down_recolor(%Increase_Font_Size)
+
+
+
+func _on_clickable_zone_increase_button_up():
+	
+	button_up_recolor(%Increase_Font_Size)
+
+
+
+func _on_clickable_zone_decrease_button_down():
+	
+	button_down_recolor(%Decrease_Font_Size)
+
+
+
+func _on_clickable_zone_decrease_button_up():
+	
+	button_up_recolor(%Decrease_Font_Size)
+"
+
+[node name="Font_Size_Changer" type="Button"]
+custom_minimum_size = Vector2(34, 26)
+anchors_preset = -1
+anchor_right = 0.031
+anchor_bottom = 0.043
+offset_right = 0.287998
+offset_bottom = 0.136
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = ExtResource("1_kynm5")
+script = SubResource("GDScript_b6m80")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+metadata/_edit_lock_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Font_Size" type="Label" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_uqctf")
+theme_override_colors/font_color = Color(0.917647, 0.858824, 0.784314, 1)
+text = "16"
+uppercase = true
+
+[node name="Size_Settings" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+script = SubResource("GDScript_pil44")
+
+[node name="Increase_Font_Size" type="TextureButton" parent="MarginContainer/HBoxContainer/Size_Settings"]
+unique_name_in_owner = true
+modulate = Color(0.917647, 0.858824, 0.784314, 1)
+custom_minimum_size = Vector2(10, 9)
+layout_mode = 2
+texture_normal = ExtResource("4_7hb0y")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Decrease_Font_Size" type="TextureButton" parent="MarginContainer/HBoxContainer/Size_Settings"]
+unique_name_in_owner = true
+modulate = Color(0.917647, 0.858824, 0.784314, 1)
+custom_minimum_size = Vector2(10, 9)
+layout_mode = 2
+texture_normal = ExtResource("4_7hb0y")
+ignore_texture_size = true
+stretch_mode = 4
+flip_v = true
+
+[node name="Clickable_Zone_Increase" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+theme_override_styles/normal = ExtResource("4_yatf3")
+theme_override_styles/hover = ExtResource("4_yatf3")
+theme_override_styles/pressed = ExtResource("4_yatf3")
+theme_override_styles/focus = ExtResource("4_yatf3")
+metadata/_edit_use_anchors_ = true
+
+[node name="Clickable_Zone_Decrease" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/normal = ExtResource("4_yatf3")
+theme_override_styles/hover = ExtResource("4_yatf3")
+theme_override_styles/pressed = ExtResource("4_yatf3")
+theme_override_styles/focus = ExtResource("4_yatf3")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="button_down" from="MarginContainer/HBoxContainer/Size_Settings/Increase_Font_Size" to="MarginContainer/HBoxContainer/Size_Settings" method="_on_increase_font_size_button_down"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Size_Settings/Increase_Font_Size" to="MarginContainer/HBoxContainer/Size_Settings" method="_on_increase_font_size_button_up"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Size_Settings/Increase_Font_Size" to="." method="_on_increase_font_size_pressed"]
+[connection signal="button_down" from="MarginContainer/HBoxContainer/Size_Settings/Decrease_Font_Size" to="MarginContainer/HBoxContainer/Size_Settings" method="_on_decrease_font_size_button_down"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Size_Settings/Decrease_Font_Size" to="MarginContainer/HBoxContainer/Size_Settings" method="_on_decrease_font_size_button_up"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Size_Settings/Decrease_Font_Size" to="." method="_on_decrease_font_size_pressed"]
+[connection signal="button_down" from="Clickable_Zone_Increase" to="MarginContainer/HBoxContainer/Size_Settings" method="_on_clickable_zone_increase_button_down"]
+[connection signal="button_up" from="Clickable_Zone_Increase" to="MarginContainer/HBoxContainer/Size_Settings" method="_on_clickable_zone_increase_button_up"]
+[connection signal="pressed" from="Clickable_Zone_Increase" to="." method="_on_clickable_zone_increase_pressed"]
+[connection signal="button_down" from="Clickable_Zone_Decrease" to="MarginContainer/HBoxContainer/Size_Settings" method="_on_clickable_zone_decrease_button_down"]
+[connection signal="button_up" from="Clickable_Zone_Decrease" to="MarginContainer/HBoxContainer/Size_Settings" method="_on_clickable_zone_decrease_button_up"]
+[connection signal="pressed" from="Clickable_Zone_Decrease" to="." method="_on_clickable_zone_decrease_pressed"]

@@ -1,0 +1,316 @@
+[gd_scene load_steps=15 format=3 uid="uid://dymnoesboj4y1"]
+
+[ext_resource type="Script" path="res://Scenes/Open_New.gd" id="1_7hy83"]
+[ext_resource type="Script" path="res://Scenes/Save_Current.gd" id="1_gs6ai"]
+[ext_resource type="Script" path="res://Scenes/Main.gd" id="1_ql0fl"]
+[ext_resource type="Theme" uid="uid://bifvasxiearl8" path="res://UI/Main_Text_Theme.tres" id="2_6ke35"]
+[ext_resource type="Script" path="res://Scenes/Save_As.gd" id="3_7w27r"]
+[ext_resource type="Script" path="res://Scenes/FileDialog.gd" id="4_2dn0x"]
+[ext_resource type="Script" path="res://Scenes/Warnings_And_Errors.gd" id="6_3etx6"]
+[ext_resource type="FontFile" uid="uid://cj82qepmjhy4n" path="res://UI/Raleway-SemiBold.ttf" id="6_uwn62"]
+
+[sub_resource type="Animation" id="Animation_ne7w3"]
+resource_name = "Double_Blink_Then_Hide"
+length = 3.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 3.3, 3.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.843137, 0, 0, 1), Color(1, 0, 0, 0), Color(0.843137, 0, 0, 1), Color(1, 0, 0, 0), Color(0.843137, 0, 0, 1), Color(0.843137, 0, 0, 1), Color(1, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:text")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [""]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_eprl3"]
+_data = {
+"Double_Blink_Then_Hide": SubResource("Animation_ne7w3")
+}
+
+[sub_resource type="Animation" id="Animation_gx46x"]
+resource_name = "Darken_Screen"
+length = 0.2
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Screen_Darkening_Color_Rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"show"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Screen_Darkening_Color_Rect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.784314)]
+}
+
+[sub_resource type="Animation" id="Animation_f3235"]
+resource_name = "Screen_Blink"
+length = 0.2
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Screen_Darkening_Color_Rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"show"
+}, {
+"args": [],
+"method": &"hide"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Screen_Darkening_Color_Rect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.784314), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fjput"]
+resource_name = "Undarken_Screen"
+length = 0.2
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FileDialog")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Screen_Darkening_Color_Rect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.784314), Color(0, 0, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Screen_Darkening_Color_Rect")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0l4bh"]
+_data = {
+"Darken_Screen": SubResource("Animation_gx46x"),
+"Screen_Blink": SubResource("Animation_f3235"),
+"Undarken_Screen": SubResource("Animation_fjput")
+}
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ql0fl")
+metadata/_edit_lock_ = true
+
+[node name="Background_Color_Rect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.168627, 0.168627, 0.168627, 1)
+metadata/_edit_lock_ = true
+
+[node name="Top_Bar" type="Control" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 0.057
+offset_bottom = 0.0639992
+grow_horizontal = 2
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Top_Bar_Controls" type="HBoxContainer" parent="Top_Bar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.00347222
+anchor_top = 0.135
+anchor_right = 1.00347
+anchor_bottom = 0.891514
+offset_top = 0.00499964
+offset_right = -875.0
+offset_bottom = 0.0139999
+grow_vertical = 2
+theme = ExtResource("2_6ke35")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Open_New" type="Button" parent="Top_Bar/Top_Bar_Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_6ke35")
+text = "Open New"
+script = ExtResource("1_7hy83")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Save_As" type="Button" parent="Top_Bar/Top_Bar_Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_6ke35")
+text = "Save As..."
+script = ExtResource("3_7w27r")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Save_Current" type="Button" parent="Top_Bar/Top_Bar_Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_6ke35")
+text = "Save Current"
+script = ExtResource("1_gs6ai")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Create_Empty" type="Button" parent="Top_Bar/Top_Bar_Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_6ke35")
+text = "Create Empty"
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Warnings_And_Errors" type="Label" parent="Top_Bar"]
+unique_name_in_owner = true
+modulate = Color(1, 0, 0, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.951
+anchor_top = 0.513027
+anchor_right = 1.0
+anchor_bottom = 0.514
+offset_left = -0.552002
+offset_top = -9.982
+offset_right = -8.0
+offset_bottom = 9.982
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("2_6ke35")
+theme_override_fonts/font = ExtResource("6_uwn62")
+script = ExtResource("6_3etx6")
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Top_Bar/Warnings_And_Errors"]
+libraries = {
+"": SubResource("AnimationLibrary_eprl3")
+}
+
+[node name="TextEdit" type="TextEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.0570988
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_6ke35")
+placeholder_text = "Type here..."
+wrap_mode = 1
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Screen_Darkening_Color_Rect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="FileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+disable_3d = true
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 360)
+exclusive = false
+unresizable = true
+popup_window = true
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+show_hidden_files = true
+script = ExtResource("4_2dn0x")
+
+[node name="Screen_Animations" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_0l4bh")
+}
+
+[connection signal="pressed" from="Top_Bar/Top_Bar_Controls/Open_New" to="Top_Bar/Top_Bar_Controls/Open_New" method="_on_pressed"]
+[connection signal="pressed" from="Top_Bar/Top_Bar_Controls/Save_As" to="Top_Bar/Top_Bar_Controls/Save_As" method="_on_pressed"]
+[connection signal="pressed" from="Top_Bar/Top_Bar_Controls/Save_Current" to="Top_Bar/Top_Bar_Controls/Save_Current" method="_on_pressed"]
+[connection signal="text_changed" from="TextEdit" to="." method="_on_text_edit_text_changed"]
+[connection signal="canceled" from="FileDialog" to="FileDialog" method="_on_canceled"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj0q6s2j234c5"]
+
+[ext_resource type="Texture2D" uid="uid://byuwjl4j3ucw7" path="res://UI/Pics/sun.png" id="1_ftqum"]
+[ext_resource type="StyleBox" uid="uid://c6cbfjtoss6xt" path="res://UI/Empty_Texture_Button_Theme.tres" id="1_fu4d4"]
+
+[node name="Theme_Change_Button" type="Button"]
+modulate = Color(0.917647, 0.858824, 0.784314, 1)
+custom_minimum_size = Vector2(38, 38)
+anchors_preset = -1
+anchor_right = 0.0329306
+anchor_bottom = 0.0587531
+offset_right = 0.0639954
+offset_bottom = -0.0720062
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = ExtResource("1_fu4d4")
+theme_override_styles/hover = ExtResource("1_fu4d4")
+theme_override_styles/pressed = ExtResource("1_fu4d4")
+theme_override_styles/focus = ExtResource("1_fu4d4")
+icon = ExtResource("1_ftqum")
+icon_alignment = 1
+expand_icon = true
+metadata/_edit_use_anchors_ = true

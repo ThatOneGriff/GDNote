@@ -1,0 +1,923 @@
+[gd_scene load_steps=32 format=3 uid="uid://dymnoesboj4y1"]
+
+[ext_resource type="Script" path="res://Scenes/Open_New.gd" id="1_7hy83"]
+[ext_resource type="Script" path="res://Scenes/Save_Current.gd" id="1_gs6ai"]
+[ext_resource type="Script" path="res://Scenes/Main.gd" id="1_ql0fl"]
+[ext_resource type="Script" path="res://Scenes/Top_Bar.gd" id="2_j5adf"]
+[ext_resource type="Theme" uid="uid://bifvasxiearl8" path="res://UI/Main_Text_Theme.tres" id="2_jfys0"]
+[ext_resource type="Script" path="res://Scenes/Save_As.gd" id="3_7w27r"]
+[ext_resource type="StyleBox" uid="uid://hlp12jf7jdbu" path="res://UI/Black_Themes/Button_Theme.tres" id="3_3450n"]
+[ext_resource type="Script" path="res://Scenes/FileDialog.gd" id="4_2dn0x"]
+[ext_resource type="StyleBox" uid="uid://nynpljs8e80t" path="res://UI/Black_Themes/Button_Pressed_Theme.tres" id="4_7ir7h"]
+[ext_resource type="Script" path="res://Scenes/Warnings_And_Errors.gd" id="6_3etx6"]
+[ext_resource type="Script" path="res://Scenes/Create_Empty.gd" id="6_wo5io"]
+[ext_resource type="PackedScene" uid="uid://dqm6c8ffdhlfi" path="res://Scenes/Font_Size_Changer.tscn" id="8_1pool"]
+[ext_resource type="FontFile" uid="uid://cj82qepmjhy4n" path="res://UI/Fonts/Raleway-SemiBold.ttf" id="10_551yt"]
+[ext_resource type="PackedScene" uid="uid://dj0q6s2j234c5" path="res://Scenes/Theme_Change_Button.tscn" id="10_dw708"]
+[ext_resource type="Script" path="res://Scenes/Theme_Change_Button.gd" id="11_058ri"]
+[ext_resource type="Script" path="res://Scenes/Theme_Changer.gd" id="14_1any6"]
+[ext_resource type="StyleBox" uid="uid://dpqkcbrieje0f" path="res://UI/Black_Themes/Text_Edit_Theme.tres" id="14_8o88k"]
+[ext_resource type="Script" path="res://Scenes/Sun_Moon_Icon.gd" id="17_kmk1b"]
+[ext_resource type="AudioStream" uid="uid://cvtqraubavsor" path="res://Sounds/save_click.mp3" id="20_vk3nj"]
+[ext_resource type="Script" path="res://Scenes/Save_Popup.gd" id="21_ak5wo"]
+[ext_resource type="StyleBox" uid="uid://wnehsqqspy1u" path="res://UI/White_Themes/Button_Theme.tres" id="22_25u5j"]
+[ext_resource type="StyleBox" uid="uid://cxtnat21kksuu" path="res://UI/White_Themes/Button_Pressed_Theme.tres" id="23_8jb3e"]
+
+[sub_resource type="Animation" id="Animation_ne7w3"]
+resource_name = "Double_Blink_Then_Hide"
+length = 3.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 3.3, 3.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 0.376471, 0, 1), Color(1, 0, 0, 0), Color(1, 0.376471, 0, 1), Color(1, 0, 0, 0), Color(1, 0.376471, 0, 1), Color(1, 0.376471, 0, 1), Color(1, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:text")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [""]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_eprl3"]
+_data = {
+"Double_Blink_Then_Hide": SubResource("Animation_ne7w3")
+}
+
+[sub_resource type="GDScript" id="GDScript_fw2cg"]
+script/source = "extends TextEdit
+
+
+
+func change_theme_to_black():
+	
+	add_theme_stylebox_override(\"normal\", load(\"UI/Black_Themes/Text_Edit_Theme.tres\"))
+	add_theme_stylebox_override(\"focus\", load(\"UI/Black_Themes/Text_Edit_Theme.tres\"))
+	add_theme_color_override(\"font_color\", Color(\"eadbc8\"))
+	add_theme_color_override(\"font_placeholder_color\", Color(\"eadbc8af\"))
+	add_theme_color_override(\"caret_color\", Color(\"eadbc8\"))
+
+
+
+func change_theme_to_white():
+	
+	add_theme_stylebox_override(\"normal\", load(\"UI/White_Themes/Text_Edit_Theme.tres\"))
+	add_theme_stylebox_override(\"focus\", load(\"UI/White_Themes/Text_Edit_Theme.tres\"))
+	add_theme_color_override(\"font_color\", Color(\"222222\"))
+	add_theme_color_override(\"font_placeholder_color\", Color(\"222222af\"))
+	add_theme_color_override(\"caret_color\", Color(\"222222\"))
+
+
+
+func _ready():
+	
+	grab_focus()
+	highlight_all_occurrences = true
+
+
+
+#	====		SIGNALS		====	
+
+
+
+func _on_font_size_changer_change_font_size(by):
+	
+	add_theme_font_size_override(\"font_size\", get_theme_font_size(\"font_size\") + by)
+"
+
+[sub_resource type="Animation" id="Animation_qyq3p"]
+resource_name = "Change_Theme"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Theme_Changer:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.972549, 0.941176, 0.898039, 0), Color(0.972549, 0.941176, 0.898039, 1), Color(0.972549, 0.941176, 0.898039, 1), Color(0.972549, 0.941176, 0.898039, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Theme_Changer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"show"
+}, {
+"args": [],
+"method": &"hide"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Theme_Changer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"change_theme_to_black"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Theme_Changer/Sun_Moon_Icon:anchor_left")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.45, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-0.0329861, 0.5, 0.5, 1.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Theme_Changer/Sun_Moon_Icon:anchor_top")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.503086]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Theme_Changer/Sun_Moon_Icon:anchor_right")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.45, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-0.0329861, 0.5, 0.5, 1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Theme_Changer/Sun_Moon_Icon:anchor_bottom")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.503086]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Theme_Changer/Sun_Moon_Icon:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.05, 0.15, 0.4, 0.65, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.917647, 0.858824, 0.784314, 0), Color(0.917647, 0.858824, 0.784314, 1), Color(0.168627, 0.168627, 0.168627, 1), Color(0.917647, 0.858824, 0.784314, 1), Color(0.917647, 0.858824, 0.784314, 0)]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Theme_Changer/Sun_Moon_Icon")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"change_to_sun"
+}]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Theme_Changer/Sun_Moon_Icon")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"change_to_moon"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_7y3fr"]
+resource_name = "Change_Theme_To_White"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Theme_Changer:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.133333, 0.133333, 0.133333, 0), Color(0.133333, 0.133333, 0.133333, 1), Color(0.133333, 0.133333, 0.133333, 1), Color(0.133333, 0.133333, 0.133333, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Theme_Changer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"show"
+}, {
+"args": [],
+"method": &"hide"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Theme_Changer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"change_theme_to_white"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Theme_Changer/Sun_Moon_Icon:anchor_left")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.45, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-0.0329861, 0.5, 0.5, 1.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Theme_Changer/Sun_Moon_Icon:anchor_top")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.503086]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Theme_Changer/Sun_Moon_Icon:anchor_right")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.45, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-0.0329861, 0.5, 0.5, 1.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Theme_Changer/Sun_Moon_Icon:anchor_bottom")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.503086]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Theme_Changer/Sun_Moon_Icon:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.05, 0.15, 0.4, 0.65, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.168627, 0.168627, 0.168627, 0), Color(0.168627, 0.168627, 0.168627, 1), Color(0.917647, 0.858824, 0.784314, 1), Color(0.168627, 0.168627, 0.168627, 1), Color(0.168627, 0.168627, 0.168627, 0)]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Theme_Changer/Sun_Moon_Icon")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"change_to_moon"
+}]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Theme_Changer/Sun_Moon_Icon")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"change_to_sun"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_gx46x"]
+resource_name = "Darken_Screen"
+length = 0.2
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Screen_Darkening_Color_Rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"show"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Screen_Darkening_Color_Rect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.784314)]
+}
+
+[sub_resource type="Animation" id="Animation_f3235"]
+resource_name = "Screen_Blink"
+length = 0.2
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Screen_Darkening_Color_Rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"show"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Screen_Darkening_Color_Rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Screen_Darkening_Color_Rect:color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.784314), Color(0, 0, 0, 0)]
+}
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SoundEffectPlayer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("20_vk3nj")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/3/use_blend = true
+
+[sub_resource type="Animation" id="Animation_fjput"]
+resource_name = "Undarken_Screen"
+length = 0.2
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FileDialog")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Screen_Darkening_Color_Rect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.784314), Color(0, 0, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Screen_Darkening_Color_Rect")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0l4bh"]
+_data = {
+"Change_Theme_To_Black": SubResource("Animation_qyq3p"),
+"Change_Theme_To_White": SubResource("Animation_7y3fr"),
+"Darken_Screen": SubResource("Animation_gx46x"),
+"Screen_Blink": SubResource("Animation_f3235"),
+"Undarken_Screen": SubResource("Animation_fjput")
+}
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ql0fl")
+metadata/_edit_lock_ = true
+
+[node name="Background_Color_Rect" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.168627, 0.168627, 0.168627, 1)
+metadata/_edit_lock_ = true
+
+[node name="Top_Bar" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 0.057
+offset_bottom = 0.0639992
+grow_horizontal = 2
+script = ExtResource("2_j5adf")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Top_Bar_Controls" type="HBoxContainer" parent="Top_Bar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.00347222
+anchor_top = 0.107973
+anchor_right = 1.15885
+anchor_bottom = 1.13476
+offset_top = 0.00499964
+offset_right = -875.0
+offset_bottom = 0.0139999
+grow_vertical = 2
+theme = ExtResource("2_jfys0")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Open_New" type="Button" parent="Top_Bar/Top_Bar_Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_jfys0")
+theme_override_colors/font_color = Color(0.917647, 0.858824, 0.784314, 1)
+theme_override_colors/font_pressed_color = Color(0.854902, 0.752941, 0.639216, 1)
+theme_override_colors/font_hover_color = Color(0.854902, 0.752941, 0.639216, 1)
+theme_override_styles/normal = ExtResource("3_3450n")
+theme_override_styles/hover = ExtResource("4_7ir7h")
+theme_override_styles/pressed = ExtResource("4_7ir7h")
+theme_override_styles/focus = ExtResource("4_7ir7h")
+text = "Open New"
+script = ExtResource("1_7hy83")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Save_As" type="Button" parent="Top_Bar/Top_Bar_Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_jfys0")
+theme_override_colors/font_color = Color(0.917647, 0.858824, 0.784314, 1)
+theme_override_colors/font_pressed_color = Color(0.854902, 0.752941, 0.639216, 1)
+theme_override_colors/font_hover_color = Color(0.854902, 0.752941, 0.639216, 1)
+theme_override_styles/normal = ExtResource("3_3450n")
+theme_override_styles/hover = ExtResource("4_7ir7h")
+theme_override_styles/pressed = ExtResource("4_7ir7h")
+theme_override_styles/focus = ExtResource("4_7ir7h")
+text = "Save As..."
+script = ExtResource("3_7w27r")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Save_Current" type="Button" parent="Top_Bar/Top_Bar_Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_jfys0")
+theme_override_colors/font_color = Color(0.917647, 0.858824, 0.784314, 1)
+theme_override_colors/font_pressed_color = Color(0.854902, 0.752941, 0.639216, 1)
+theme_override_colors/font_hover_color = Color(0.854902, 0.752941, 0.639216, 1)
+theme_override_styles/normal = ExtResource("3_3450n")
+theme_override_styles/hover = ExtResource("4_7ir7h")
+theme_override_styles/pressed = ExtResource("4_7ir7h")
+theme_override_styles/focus = ExtResource("4_7ir7h")
+text = "Save Current"
+script = ExtResource("1_gs6ai")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Create_Empty" type="Button" parent="Top_Bar/Top_Bar_Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_jfys0")
+theme_override_colors/font_color = Color(0.917647, 0.858824, 0.784314, 1)
+theme_override_colors/font_pressed_color = Color(0.854902, 0.752941, 0.639216, 1)
+theme_override_colors/font_hover_color = Color(0.854902, 0.752941, 0.639216, 1)
+theme_override_styles/normal = ExtResource("3_3450n")
+theme_override_styles/hover = ExtResource("4_7ir7h")
+theme_override_styles/pressed = ExtResource("4_7ir7h")
+theme_override_styles/focus = ExtResource("4_7ir7h")
+text = "Create Empty"
+script = ExtResource("6_wo5io")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Font_Size_Changer" parent="Top_Bar/Top_Bar_Controls" instance=ExtResource("8_1pool")]
+unique_name_in_owner = true
+layout_mode = 2
+metadata/_edit_lock_ = true
+
+[node name="Theme_Change_Button" parent="Top_Bar" instance=ExtResource("10_dw708")]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 1.0
+anchor_top = 0.622
+anchor_right = 1.0
+anchor_bottom = 0.622
+offset_left = -42.0
+offset_top = -19.014
+offset_right = -4.0
+offset_bottom = 18.986
+grow_vertical = 0
+script = ExtResource("11_058ri")
+
+[node name="Warnings_And_Errors" type="Label" parent="Top_Bar"]
+unique_name_in_owner = true
+modulate = Color(1, 0.376471, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.963
+anchor_top = 0.635
+anchor_right = 0.963
+anchor_bottom = 0.635
+offset_left = -86.3761
+offset_top = -11.495
+offset_right = -14.3761
+offset_bottom = 11.505
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("2_jfys0")
+theme_override_fonts/font = ExtResource("10_551yt")
+text = "Warnings"
+script = ExtResource("6_3etx6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Top_Bar/Warnings_And_Errors"]
+libraries = {
+"": SubResource("AnimationLibrary_eprl3")
+}
+
+[node name="TextEdit" type="TextEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.003
+anchor_top = 0.0708889
+anchor_right = 0.996528
+anchor_bottom = 0.993827
+offset_left = 0.544
+offset_top = 0.0639992
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_jfys0")
+theme_override_colors/font_color = Color(0.917647, 0.858824, 0.784314, 1)
+theme_override_colors/font_placeholder_color = Color(0.917647, 0.858824, 0.784314, 0.686275)
+theme_override_colors/caret_color = Color(0.917647, 0.858824, 0.784314, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("14_8o88k")
+theme_override_styles/focus = ExtResource("14_8o88k")
+placeholder_text = "Type here..."
+wrap_mode = 1
+script = SubResource("GDScript_fw2cg")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Screen_Darkening_Color_Rect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Theme_Changer" type="ColorRect" parent="." groups=["Saveable"]]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.972549, 0.941176, 0.898039, 0)
+script = ExtResource("14_1any6")
+metadata/_edit_lock_ = true
+
+[node name="Sun_Moon_Icon" parent="Theme_Changer" instance=ExtResource("10_dw708")]
+modulate = Color(0.917647, 0.858824, 0.784314, 0)
+layout_mode = 1
+anchor_left = -0.0329861
+anchor_top = 0.503086
+anchor_right = -0.0329861
+anchor_bottom = 0.503086
+offset_top = -19.0
+offset_right = 38.0
+offset_bottom = 19.0
+script = ExtResource("17_kmk1b")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+disable_3d = true
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 360)
+exclusive = false
+unresizable = true
+popup_window = true
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+show_hidden_files = true
+script = ExtResource("4_2dn0x")
+
+[node name="Screen_Animations" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_0l4bh")
+}
+
+[node name="SoundEffectPlayer" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+volume_db = 5.0
+
+[node name="Save_Popup" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(300, 150)
+layout_mode = 1
+anchor_left = 0.37
+anchor_top = 0.384
+anchor_right = 0.63
+anchor_bottom = 0.616
+offset_left = -0.23999
+offset_top = 0.167999
+offset_right = 0.239929
+offset_bottom = -0.16803
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("21_ak5wo")
+metadata/_edit_lock_ = true
+
+[node name="Background" type="ColorRect" parent="Save_Popup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.917647, 0.858824, 0.784314, 1)
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Header" type="Control" parent="Save_Popup"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 0.198347
+grow_horizontal = 2
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Background" type="ColorRect" parent="Save_Popup/Header"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.083
+offset_bottom = 0.00799942
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.854902, 0.752941, 0.639216, 1)
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Title" type="Label" parent="Save_Popup/Header"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.498
+anchor_top = 0.5625
+anchor_right = 0.498
+anchor_bottom = 0.5625
+offset_left = -66.5
+offset_top = -11.5
+offset_right = 66.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_jfys0")
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_font_sizes/font_size = 20
+text = "Save current file?"
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="x" type="Button" parent="Save_Popup/Header"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 0.975
+offset_left = -32.0
+offset_bottom = -1.00825
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_styles/normal = ExtResource("22_25u5j")
+theme_override_styles/hover = ExtResource("23_8jb3e")
+theme_override_styles/pressed = ExtResource("23_8jb3e")
+theme_override_styles/focus = ExtResource("23_8jb3e")
+text = "x"
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Middle_Part" type="Control" parent="Save_Popup"]
+layout_mode = 1
+anchor_top = 0.215
+anchor_right = 1.0
+anchor_bottom = 0.669
+offset_top = -0.0150013
+offset_bottom = 0.0509949
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Body_Text" type="Label" parent="Save_Popup/Middle_Part"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -117.5
+offset_top = -11.5
+offset_right = 117.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_font_sizes/font_size = 16
+text = "All of the unsaved data will be lost!"
+metadata/_edit_lock_ = true
+
+[node name="Save_Button" type="Button" parent="Save_Popup"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.048
+anchor_top = 0.669355
+anchor_right = 0.46
+anchor_bottom = 0.917355
+offset_top = 0.00799561
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_styles/normal = ExtResource("22_25u5j")
+theme_override_styles/hover = ExtResource("23_8jb3e")
+theme_override_styles/pressed = ExtResource("23_8jb3e")
+theme_override_styles/focus = ExtResource("23_8jb3e")
+text = "Save"
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Dont_Save_Button" type="Button" parent="Save_Popup"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.54
+anchor_top = 0.669355
+anchor_right = 0.952
+anchor_bottom = 0.917355
+offset_top = 0.00799561
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.133333, 0.133333, 0.133333, 1)
+theme_override_styles/normal = ExtResource("22_25u5j")
+theme_override_styles/hover = ExtResource("23_8jb3e")
+theme_override_styles/pressed = ExtResource("23_8jb3e")
+theme_override_styles/focus = ExtResource("23_8jb3e")
+text = "Don't Save"
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[connection signal="exiting_without_saving" from="." to="Save_Popup" method="_on_main_exiting_without_saving"]
+[connection signal="pressed" from="Top_Bar/Top_Bar_Controls/Open_New" to="Top_Bar/Top_Bar_Controls/Open_New" method="_on_pressed"]
+[connection signal="pressed" from="Top_Bar/Top_Bar_Controls/Save_As" to="Top_Bar/Top_Bar_Controls/Save_As" method="_on_pressed"]
+[connection signal="pressed" from="Top_Bar/Top_Bar_Controls/Save_Current" to="Top_Bar/Top_Bar_Controls/Save_Current" method="_on_pressed"]
+[connection signal="save_popup_can_proceed" from="Top_Bar/Top_Bar_Controls/Save_Current" to="Save_Popup" method="_on_save_current_save_popup_can_proceed"]
+[connection signal="empty_creation_without_saving" from="Top_Bar/Top_Bar_Controls/Create_Empty" to="Save_Popup" method="_on_create_empty_empty_creation_without_saving"]
+[connection signal="pressed" from="Top_Bar/Top_Bar_Controls/Create_Empty" to="Top_Bar/Top_Bar_Controls/Create_Empty" method="_on_pressed"]
+[connection signal="change_font_size" from="Top_Bar/Top_Bar_Controls/Font_Size_Changer" to="TextEdit" method="_on_font_size_changer_change_font_size"]
+[connection signal="pressed" from="Top_Bar/Theme_Change_Button" to="Top_Bar/Theme_Change_Button" method="_on_pressed"]
+[connection signal="pressed" from="Top_Bar/Theme_Change_Button" to="Theme_Changer" method="_on_theme_change_button_pressed"]
+[connection signal="text_changed" from="TextEdit" to="." method="_on_text_edit_text_changed"]
+[connection signal="canceled" from="FileDialog" to="FileDialog" method="_on_canceled"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="pressed" from="Save_Popup/Header/x" to="Save_Popup" method="_on_x_pressed"]
+[connection signal="pressed" from="Save_Popup/Save_Button" to="Save_Popup" method="_on_save_button_pressed"]
+[connection signal="pressed" from="Save_Popup/Dont_Save_Button" to="Save_Popup" method="_on_dont_save_button_pressed"]
